@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="mb-4">Create a New Board</h1>
+<form class="col-8 mx-auto" action="/new_board" method="POST">
+  {{ form.csrf_token }}
+  <div class="mb-5 d-flex">
+    {{ form.title(class="form-control", placeholder="Board title") }}
+    <button
+      type="submit"
+      class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark float-right"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+<div class="card-deck col-12">
+  {% if all_boards %} {% for board in all_boards %}
+  <div class="card mb-2">
+    <div class="card-header d-flex justify-content-between">
+      <a class="text-decoration-none" href="/view_tasks/{{board.id}}">
+        <h5 class="card-title text-dark">{{ board.title }}</h5>
+      </a>
+      <div class="d-flex gap-1">
+        <button
+        class="btn btn-warning show-form"
+        data-index-number="{{board.id}}"
+      >
+        Edit
+      </button>
+      <form action="/delete_board/{{board.id}}" method="POST">
+        <button class="btn btn-danger">
+          Delete
+        </button>
+      </form>
+      </div>
+    </div>
+    <div class="card-body hide" id="update-board-{{board.id}}">
+      <h4 class="text-dark">Update Board</h4>
+      <form
+        class="col-8 mx-auto"
+        action="/update-taskBoard/{{board.id}}"
+        method="POST"
+      >
+        {{ form.csrf_token }}
+        <div class="mb-4 d-column-flex" style="text-align: left">
+          {{ form.title(class="form-control", value=board.title,_external=True) }}
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="btn btn-secondary fw-bold border-danger bg-danger text-white hide-form"
+            data-index-number="{{board.id}}"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-secondary fw-bold border-success bg-success text-white"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endfor %} {% endif %}
+
+  <script>
+    document.body.addEventListener("click", function (e) {
+      if (e.target.matches(".show-form")) {
+        const indexNumber = e.target.dataset.indexNumber;
+        document
+          .getElementById(`update-board-${indexNumber}`)
+          .classList.remove("hide");
+      }
+      if (e.target.matches(".hide-form")) {
+        const indexNumber = e.target.dataset.indexNumber;
+        document
+          .getElementById(`update-board-${indexNumber}`)
+          .classList.add("hide");
+      }
+    });
+  </script>
+  {% endblock %}
+</div>

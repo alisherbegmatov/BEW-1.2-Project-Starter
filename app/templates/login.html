@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1 class="mb-4">Log In</h1>
+<form class="col-8 mx-auto" action="/login" method="POST">
+  {{ form.csrf_token }}
+  <div class="mb-4 d-column-flex" style="text-align: left">
+    {{ form.username(class="form-control", placeholder="Username") }}
+    <ul>
+      {% for error in form.username.errors %}
+      <li class="error">{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="mb-4 d-column-flex" style="text-align: left">
+
+    {{ form.password(class="form-control", placeholder="Password") }}
+    <ul>
+      {% for error in form.password.errors %}
+      <li class="error">{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-lg btn-secondary fw-bold border-white bg-white text-dark float-right"
+  >
+    Submit
+  </button>
+</form>
+
+{% endblock %}
